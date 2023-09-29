@@ -12,15 +12,15 @@ class Usuario {
 		this.tipo = tipo;
 	}
 
-	int getId() {
+	public int getId() {
 		return id;
 	}
 
-	String getNome() {
+	public String getNome() {
 		return nome;
 	}
 
-	String getTipo() {
+	public String getTipo() {
 		return tipo;
 	}
 }
