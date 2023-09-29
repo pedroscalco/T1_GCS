@@ -2,25 +2,25 @@ package SistemaExames;
 
 class Usuario {
 
-	int id;
-	String nome;
-	String tipo;
+	private int id;
+	private String nome;
+	private String tipo;
 	
-	Usuario(int id, String nome, String tipo) {
+	public Usuario(int id, String nome, String tipo) {
 		this.id = id;
 		this.nome = nome;
 		this.tipo = tipo;
 	}
 
-	int getId() {
+	public int getId() {
 		return id;
 	}
 
-	String getNome() {
+	public String getNome() {
 		return nome;
 	}
 
-	String getTipo() {
+	public String getTipo() {
 		return tipo;
 	}
 }
