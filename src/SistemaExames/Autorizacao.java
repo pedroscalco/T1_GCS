@@ -1,0 +1,5 @@
+package SistemaExames;
+
+class Autorizacao {
+
+}
