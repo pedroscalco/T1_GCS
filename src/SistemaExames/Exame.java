@@ -1,4 +1,5 @@
 package SistemaExames;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -38,5 +39,19 @@ public class Exame {
 
     public Date getDataSolicitacao() {
         return dataSolicitacao;
+    }
+
+    public boolean setStatus(boolean verificacao){
+        if(verificacao == true){
+            this.status = true;
+        } else {
+            this.status = false;
+        }
+        return this.status;
+    }
+
+    public void setDataRealizacao(String dataRealizacao) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        this.dataRealizacao = dateFormat.parse(dataRealizacao);
     }
 }
