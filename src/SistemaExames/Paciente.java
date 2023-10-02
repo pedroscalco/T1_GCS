@@ -17,7 +17,7 @@ public class Paciente extends Usuario {
     }
 
     // Método para listar as autorizações de exame do paciente ordenadas pela data de cadastro
-    public void listarAutorizacoesPorDataCadastro(ArrayList<Autorizacao> autorizacoes) {
+    public int listarAutorizacoesPorDataCadastro(ArrayList<Autorizacao> autorizacoes) {
     	
     	List <Autorizacao> autorizacoesPaciente = new ArrayList<>();
 
@@ -42,27 +42,33 @@ public class Paciente extends Usuario {
 	            }
 	        }
 	        
-        	System.out.println("-- AUTORIZAÇÕES DO PACIENTE --");
+        	System.out.println("-- AUTORIZAÇÕES DO PACIENTE " + this.getNome().toUpperCase() + " --");
 	        
         	for (Autorizacao autorizacao : autorizacoesPaciente) {
     	        System.out.println("");
     	        System.out.println("ID: " + autorizacao.getId());
 	        	System.out.println("Médico: " + autorizacao.getMedico().getNome());
 	        	System.out.println("Exame: " + autorizacao.getExameSolicitado().getTipo());
-	            System.out.println("Data de solicitação:" + autorizacao.getDataCadastro());
-	            System.out.println("Data de realização do exame:" + autorizacao.getDataRealizacao());
+	            System.out.println("Data de solicitação: " + autorizacao.getDataCadastro());
+	            System.out.println("Data de realização do exame: " + autorizacao.getDataRealizacao());
 	        }
-    	} else {
+    	} else if (n == 1){
     		Autorizacao autorizacao = autorizacoesPaciente.get(0);
-        	System.out.println("-- AUTORIZAÇÕES DO PACIENTE --");
+        	System.out.println("-- AUTORIZAÇÕES DO PACIENTE " + this.getNome().toUpperCase() + " --");
 	        System.out.println("");
 	        System.out.println("ID: " + autorizacao.getId());
         	System.out.println("Médico: " + autorizacao.getMedico().getNome());
         	System.out.println("Exame: " + autorizacao.getExameSolicitado().getTipo());
-    		System.out.println("Data de solicitação:" + autorizacao.getDataCadastro());
-            System.out.println("Data de realização do exame:" + autorizacao.getDataRealizacao());
+    		System.out.println("Data de solicitação: " + autorizacao.getDataCadastro());
+            System.out.println("Data de realização do exame: " + autorizacao.getDataRealizacao());
 
+    	} else {
+        	System.out.println("-- AUTORIZAÇÕES DO PACIENTE " + this.getNome().toUpperCase() + " --");
+	        System.out.println("");
+	        System.out.println("Nenhuma autorização encontrada.");
     	}
+
+    	return n;
     }
 
     public static int compararDatas(String data1, String data2) {
@@ -105,56 +111,23 @@ public class Paciente extends Usuario {
 	}
 
 	// Método para solicitar reagendamento de um exame
-    public boolean solicitarReagendamento(Autorizacao autorizacao, String novaData) {
+    public void solicitarReagendamento(Autorizacao autorizacao, String novaData) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         try {
             Date dataMarcacao = dateFormat.parse(novaData);
             Date dataCadastro = dateFormat.parse(autorizacao.getDataCadastro());
-			long diferencaEmMillis = dataCadastro.getTime() - dataMarcacao.getTime();
+			long diferencaEmMillis = dataMarcacao.getTime() - dataCadastro.getTime();
             int diasDecorridos = (int) (diferencaEmMillis / (24 * 60 * 60 * 1000));
-
+            System.out.println(diasDecorridos);
             if (diasDecorridos >= 7) {
                 autorizacao.setDataCadastro(novaData);
 				System.out.println("Exame foi reagendado com sucesso!");
-                return true;
+            } else {
+            	System.out.println("Erro ao tentar o reagendamento. Verifique as condições.");
             }
         } catch (ParseException e) {
-            System.out.println("Erro ao tentar o reagendamento. Verifique as condições.");
+            
 			e.printStackTrace();
         }
-        return false;
-    }
-
-	public void removerAutorizacaoPorIdPaciente(ArrayList<Autorizacao> autorizacoes, int idAutorizacao) {
-    List<Autorizacao> autorizacoesPaciente = new ArrayList<>();
-
-    for (Autorizacao autorizacao : autorizacoes) {
-        if (autorizacao.getPaciente().getId() == this.getId()) {
-            autorizacoesPaciente.add(autorizacao);
-        }
-    }
-
-    for (Autorizacao autorizacao : autorizacoesPaciente) {
-        if (autorizacao.getId() == idAutorizacao) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            try {
-                Date dataRealizacao = dateFormat.parse(autorizacao.getDataRealizacao());
-                Calendar calendar = Calendar.getInstance();
-                calendar.add(Calendar.DAY_OF_MONTH, 30);
-                Date dataAtual = calendar.getTime();
-                Date dataHoje = new Date();
-
-                if (dataRealizacao.after(dataHoje) && dataRealizacao.before(dataAtual)) {
-                    autorizacoes.remove(autorizacao);
-                    System.out.println("Exame cancelado!");
-                    return;
-                } else {
-                    System.out.println("O exame não pode ser cancelado com menos de 30 dias de antecedência. Verifique as condições.");
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-    }
     }
  }
