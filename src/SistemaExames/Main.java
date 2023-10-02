@@ -42,37 +42,37 @@ public class Main {
         exames.add(exame1);
         
         Exame exame2 = new Exame(exames.size()+1, "Hemograma Completo");
-        exames.add(exame1);
+        exames.add(exame2);
 
         Exame exame3 = new Exame(exames.size()+1, "Teste de Gravidez");
-        exames.add(exame1);
+        exames.add(exame3);
         
         Exame exame4 = new Exame(exames.size()+1, "Ecografia Abdominal");
-        exames.add(exame1);
+        exames.add(exame4);
         
         Exame exame5 = new Exame(exames.size()+1, "Eletrocardiograma (ECG)");
-        exames.add(exame1);
+        exames.add(exame5);
 
         Exame exame6 = new Exame(exames.size()+1, "Colonoscopia");
-        exames.add(exame1);
+        exames.add(exame6);
         
         Exame exame7 = new Exame(exames.size()+1, "Tomografia Computadorizada (TC):");
-        exames.add(exame1);
+        exames.add(exame7);
         
         Exame exame8 = new Exame(exames.size()+1, "Ressonância Magnética (RM)");
-        exames.add(exame1);
+        exames.add(exame8);
 
         Exame exame9 = new Exame(exames.size()+1, "Glicemia");
-        exames.add(exame1);
+        exames.add(exame9);
         
         Exame exame10 = new Exame(exames.size()+1, "Colesterol Total e Frações");
-        exames.add(exame1);
+        exames.add(exame10);
 
         //Autorizações:
-        Autorizacao autorizacao1 = new Autorizacao(autorizacoes.size()+1, "Não realizado.", "01/10/2023", medico1, paciente1, exame1, false);
+        Autorizacao autorizacao1 = new Autorizacao(autorizacoes.size()+1, "01/10/2023", "Não realizado.", medico1, paciente1, exame1, false);
         autorizacoes.add(autorizacao1);
         
-        Autorizacao autorizacao2 = new Autorizacao(autorizacoes.size()+1, "Não realizado.", "30/09/2023", medico1, paciente1, exame1, false);
+        Autorizacao autorizacao2 = new Autorizacao(autorizacoes.size()+1, "30/09/2023", "Não realizado.", medico1, paciente1, exame1, false);
         autorizacoes.add(autorizacao2);
         
         //Iniciando programa
@@ -118,7 +118,7 @@ public class Main {
         System.out.println("Usuários Cadastrados:");
         for (Medico medico : medicos) {
         	System.out.println("");
-        	System.out.println("  ID: " + medico.getId());
+        	System.out.println("  ID: " + medico.getIdMedico());
             System.out.println("Nome: " + medico.getNome());
         }
 		
@@ -234,6 +234,8 @@ public class Main {
             		medico.listarAutorizacao(autorizacoes, pacientes.get(p-1));
             		System.out.println("");
             		System.out.println("Pressione qualquer tecla para voltar ao Menu do Médico.");
+            		p = scanner.nextInt();
+            		scanner.nextLine(); // Limpar o buffer do scanner
             	} else if (opcao == 2) {
             		exibirExames(exames);
                		System.out.println("Insira do ID do tipo de Exame a ser filtrado.");
@@ -243,10 +245,32 @@ public class Main {
             		medico.listarAutorizacao(autorizacoes, exames.get(e-1));
             		System.out.println("");
             		System.out.println("Pressione qualquer tecla para voltar ao Menu do Médico.");
+            		e = scanner.nextInt();
+            		scanner.nextLine(); // Limpar o buffer do scanner
             	} else {
             		System.out.println("Erro. Retornando ao Menu do Médico.");
             	}
             	exibirMenuMedico(medico, autorizacoes, pacientes, exames);
+                break;
+            case 2:
+            	System.out.println("");
+            	System.out.println("Insira a data de hoje:");
+            	String dataCadastro = scanner.next();
+            	scanner.nextLine(); // Limpar o buffer do scanner
+            	exibirPacientes(pacientes);
+            	System.out.println("Insira o ID do paciente a ser examinado:");
+            	int p = scanner.nextInt();
+            	scanner.nextLine(); // Limpar o buffer do scanner
+            	exibirExames(exames);
+            	System.out.println("Insira o ID do exame a ser examinado:");
+            	int e = scanner.nextInt();
+            	scanner.nextLine(); // Limpar o buffer do scanner
+            	Autorizacao autorizacao = new Autorizacao(autorizacoes.size()+1, dataCadastro, "Não realizado", medico, pacientes.get(p-1), exames.get(e-1),false);
+            	medico.incluirAutorizacao(autorizacao, autorizacoes);
+        		System.out.println("Pressione qualquer tecla para voltar ao Menu do Médico.");
+        		e = scanner.nextInt();
+        		scanner.nextLine(); // Limpar o buffer do scanner
+                exibirMenuMedico(medico, autorizacoes, pacientes, exames);
                 break;
             case 0:
             	System.out.println("");
@@ -262,7 +286,7 @@ public class Main {
 
     private static void exibirExames(ArrayList<Exame> exames) {
     	System.out.println("");
-        System.out.println("Usuários Cadastrados:");
+        System.out.println("EXAMES CADASTRADOS:");
         for (Exame exame : exames) {
         	System.out.println("");
         	System.out.println("  ID: " + exame.getId());
