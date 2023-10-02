@@ -6,11 +6,18 @@ import java.util.Scanner;
 class Administrador extends Usuario {
 	private ArrayList<Usuario> usuarios;
 	private Scanner scanner;
+	
+	int idAdmin;
 
-	public Administrador(int id, String nome, String tipo) {
+	public Administrador(int id, String nome, String tipo, int idAdmin) {
 		super(id, nome, tipo);
 		this.usuarios = new ArrayList<>();
 		this.scanner = new Scanner(System.in);
+		this.idAdmin = idAdmin;
+	}
+
+	public int getIdAdmin() {
+		return this.idAdmin;
 	}
 
 	public void incluirUsuario() {
@@ -69,11 +76,11 @@ class Administrador extends Usuario {
 		
 		int contador = 0;
 		for (int i = 0; i < autorizacoes.size(); i++) {
-			if (autorizacoes.get(i).getExameSolicitado().getStatus()) {
+			if (autorizacoes.get(i).getStatus()) {
 				contador++;
 			}
 		}
-		
+
 		System.out.println("Porcentagem de exames realizados: " + ((contador / autorizacoes.size()) * 100) + "%");
 	}
 
