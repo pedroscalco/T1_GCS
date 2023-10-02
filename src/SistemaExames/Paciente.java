@@ -3,6 +3,7 @@ package SistemaExames;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class Paciente extends Usuario {
     }
 
     // Método para listar as autorizações de exame do paciente ordenadas pela data de cadastro
-    public void listarAutorizacoesPorDataCadastro(ArrayList<Autorizacao> autorizacoes) {
+    public int listarAutorizacoesPorDataCadastro(ArrayList<Autorizacao> autorizacoes) {
     	
     	List <Autorizacao> autorizacoesPaciente = new ArrayList<>();
 
@@ -41,7 +42,7 @@ public class Paciente extends Usuario {
 	            }
 	        }
 	        
-        	System.out.println("-- AUTORIZAÇÕES DO PACIENTE --");
+        	System.out.println("-- AUTORIZAÇÕES DO PACIENTE " + this.getNome().toUpperCase() + " --");
 	        
         	for (Autorizacao autorizacao : autorizacoesPaciente) {
     	        System.out.println("");
@@ -51,9 +52,9 @@ public class Paciente extends Usuario {
 	            System.out.println("Data de solicitação: " + autorizacao.getDataCadastro());
 	            System.out.println("Data de realização do exame: " + autorizacao.getDataRealizacao());
 	        }
-    	} else if (n==1){
+    	} else if (n == 1){
     		Autorizacao autorizacao = autorizacoesPaciente.get(0);
-        	System.out.println("-- AUTORIZAÇÕES DO PACIENTE --");
+        	System.out.println("-- AUTORIZAÇÕES DO PACIENTE " + this.getNome().toUpperCase() + " --");
 	        System.out.println("");
 	        System.out.println("ID: " + autorizacao.getId());
         	System.out.println("Médico: " + autorizacao.getMedico().getNome());
@@ -62,10 +63,12 @@ public class Paciente extends Usuario {
             System.out.println("Data de realização do exame: " + autorizacao.getDataRealizacao());
 
     	} else {
-        	System.out.println("-- AUTORIZAÇÕES DO PACIENTE --");
+        	System.out.println("-- AUTORIZAÇÕES DO PACIENTE " + this.getNome().toUpperCase() + " --");
 	        System.out.println("");
 	        System.out.println("Nenhuma autorização encontrada.");
     	}
+
+    	return n;
     }
 
     public static int compararDatas(String data1, String data2) {
@@ -89,19 +92,15 @@ public class Paciente extends Usuario {
     		System.out.println(dataRealizacao);
             Date dataSolicitacao = dateFormat.parse(autorizacao.getDataCadastro());
             Date dataMarcacao = dateFormat.parse(dataRealizacao);
-
             long diferencaEmMillis = dataMarcacao.getTime() - dataSolicitacao.getTime();
             int diasDecorridos = (int) (diferencaEmMillis / (24 * 60 * 60 * 1000));
 
-            // O paciente pode marcar como realizado antes da data de solicitação ou até 30 dias após
             if (diasDecorridos >= 0 && diasDecorridos <= 30 && !autorizacao.getStatus()) {
-            	autorizacao.setDataRealizacao(dataRealizacao); // Atualiza a data de realização no Exame
-            	autorizacao.setStatus(true); // Marca o exame como realizado
-            	System.out.println("");
+            	autorizacao.setDataRealizacao(dataRealizacao); 
+            	autorizacao.setStatus(true);
                 System.out.println("Exame foi marcado como 'realizado' com sucesso!");
             }
         } catch (Exception e) {
-        	System.out.println("");
         	System.out.println("O exame não pode ser marcado como 'realizado'. Verifique as condições.");
             e.printStackTrace();
         }
@@ -110,4 +109,25 @@ public class Paciente extends Usuario {
 	public int getIdPaciente() {
 		return this.idPaciente;
 	}
-}
+
+	// Método para solicitar reagendamento de um exame
+    public void solicitarReagendamento(Autorizacao autorizacao, String novaData) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            Date dataMarcacao = dateFormat.parse(novaData);
+            Date dataCadastro = dateFormat.parse(autorizacao.getDataCadastro());
+			long diferencaEmMillis = dataMarcacao.getTime() - dataCadastro.getTime();
+            int diasDecorridos = (int) (diferencaEmMillis / (24 * 60 * 60 * 1000));
+            System.out.println(diasDecorridos);
+            if (diasDecorridos >= 7) {
+                autorizacao.setDataCadastro(novaData);
+				System.out.println("Exame foi reagendado com sucesso!");
+            } else {
+            	System.out.println("Erro ao tentar o reagendamento. Verifique as condições.");
+            }
+        } catch (ParseException e) {
+            
+			e.printStackTrace();
+        }
+    }
+ }

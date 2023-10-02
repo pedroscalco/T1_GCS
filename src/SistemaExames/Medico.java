@@ -23,7 +23,7 @@ class Medico extends Usuario {
 		return autorizacoes;
 	}
 
-	public void listarAutorizacao(ArrayList <Autorizacao> autorizacoes, Paciente paciente){
+	public int listarAutorizacao(ArrayList <Autorizacao> autorizacoes, Paciente paciente){
     	List <Autorizacao> autorizacoesPaciente = new ArrayList<>();
 
     	for (Autorizacao autorizacao : autorizacoes) {
@@ -72,6 +72,8 @@ class Medico extends Usuario {
 	        System.out.println("");
 	        System.out.println("Nenhuma autorização encontrada.");
     	}
+    	
+    	return n;
 	}
 
 	public void listarAutorizacao(ArrayList <Autorizacao> autorizacoes, Exame exame){
@@ -98,7 +100,7 @@ class Medico extends Usuario {
 	            }
 	        }
 	        
-        	System.out.println("-- AUTORIZAÇÕES DOS EXAMES " + exame.getTipo().toUpperCase() + " --");
+        	System.out.println("-- AUTORIZAÇÕES DO EXAME " + exame.getTipo().toUpperCase() + " --");
 	        
         	for (Autorizacao autorizacao : autorizacoesTipoExame) {
     	        System.out.println("");
@@ -110,7 +112,7 @@ class Medico extends Usuario {
 	        }
     	} else if (n == 1) {
     		Autorizacao autorizacao = autorizacoesTipoExame.get(0);
-        	System.out.println("-- AUTORIZAÇÕES DO PACIENTE --");
+        	System.out.println("-- AUTORIZAÇÕES DO EXAME" + exame.getTipo().toUpperCase() + " --");
 	        System.out.println("");
 	        System.out.println("ID: " + autorizacao.getId());
         	System.out.println("Médico: " + autorizacao.getMedico().getNome());
@@ -120,7 +122,7 @@ class Medico extends Usuario {
             System.out.println("Data de realização do exame:" + autorizacao.getDataRealizacao());
 
     	} else {
-        	System.out.println("-- AUTORIZAÇÕES DO PACIENTE --");
+        	System.out.println("-- AUTORIZAÇÕES DO EXAME" + exame.getTipo().toUpperCase() + " --");
 	        System.out.println("");
 	        System.out.println("Nenhuma autorização encontrada.");
     	}
@@ -136,5 +138,12 @@ class Medico extends Usuario {
             e.printStackTrace(); // Tratar a exceção conforme necessário
             return 0; // Retorna 0 em caso de erro, indicando que as datas são consideradas iguais
         }
+    }
+    
+    public void alterarTipoExame(Autorizacao autorizacao, int tipoExame, ArrayList<Exame> exames) {
+    	autorizacao.setExameSolicitado(exames.get(tipoExame-1));
+    	System.out.println("");
+    	System.out.println("Tipo de Exame alterado com sucesso!");
+    	System.out.println("");
     }
 }
