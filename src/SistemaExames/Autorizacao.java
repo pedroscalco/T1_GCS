@@ -3,12 +3,39 @@ package SistemaExames;
 class Autorizacao {
     private int id;
     private String dataCadastro;
+    private String dataRealizacao;
     private Usuario medico;
     private Usuario paciente;
     private Exame exameSolicitado;
+    private boolean status;
 
+    public boolean getStatus() {
+		return status;
+	}
 
-    public int getId() {
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+
+	public void setDataRealizacao(String dataRealizacao) {
+		this.dataRealizacao = dataRealizacao;
+	}
+
+	public String getDataRealizacao() {
+		return dataRealizacao;
+	}
+
+	public Autorizacao(int id, String dataCadastro, String dataRealizacao, Usuario medico, Usuario paciente, Exame exameSolicitado, boolean status) {
+		this.id = id;
+		this.dataCadastro = dataCadastro;
+		this.dataRealizacao = dataRealizacao;
+		this.medico = medico;
+		this.paciente = paciente;
+		this.exameSolicitado = exameSolicitado;
+		this.status = status;
+	}
+
+	public int getId() {
         return this.id;
     }
 
@@ -47,4 +74,5 @@ class Autorizacao {
     public void setExameSolicitado(Exame exameSolicitado) {
         this.exameSolicitado = exameSolicitado;
     }
+
 }
