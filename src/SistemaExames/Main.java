@@ -36,6 +36,9 @@ public class Main {
         usuarios.add(medico1);
         
         //Administradores:
+        Administrador admin1 = new Administrador(usuarios.size()+1, "Roger", "Administrador", administradores.size()+1);
+        administradores.add((Administrador) admin1);
+        usuarios.add(admin1);
         
         //Exames:
         Exame exame1 = new Exame(exames.size()+1, "Urina Tipo I");
@@ -76,52 +79,68 @@ public class Main {
         autorizacoes.add(autorizacao2);
         
         //Iniciando programa
-        exibirMenu();
-    	Scanner scanner = new Scanner(System.in);
 
-        int opcao = scanner.nextInt();
-        scanner.nextLine(); // Limpar o buffer do scanner
+        int opcao = 5;
+        
+        while (opcao != 0) {
+            exibirMenu();
+            Scanner scanner = new Scanner(System.in);
+            opcao = scanner.nextInt();
+            scanner.nextLine(); // Limpar o buffer do scanner
 
-        switch (opcao) {
-            case 1:
-                exibirPacientes(pacientes);
-                System.out.println("");
-                System.out.println("Insira o ID do Paciente que deseja utilizar:");
-                opcao = scanner.nextInt();
-                exibirMenuPaciente(pacientes.get(opcao-1), autorizacoes);
-                scanner.nextLine(); // Limpar o buffer do scanner
-                break;
-            case 2:
-            	exibirMedicos(medicos);
-                System.out.println("Insira o ID do Medico que deseja utilizar:");
-                opcao = scanner.nextInt();
-            	exibirMenuMedico(medicos.get(opcao-1), autorizacoes, pacientes, exames);
-                scanner.nextLine(); // Limpar o buffer do scanner
-                break;
-            case 3:
-            	exibirMenuAdministrador();
-                break;
-            case 0:
-            	System.out.println("");
-                System.out.println("Saindo do programa. Até mais!");
-                break;
-            default:
-            	System.out.println("");
-                System.out.println("Opção inválida. Tente novamente.");
-                System.out.println("");
-                exibirMenu();
+            switch (opcao) {
+                case 1:
+                    exibirPacientes(pacientes);
+                    System.out.println("");
+                    System.out.println("Insira o ID do Paciente que deseja utilizar:");
+                    int idPaciente = scanner.nextInt();
+                    exibirMenuPaciente(pacientes.get(idPaciente - 1), autorizacoes);
+                    scanner.nextLine(); // Limpar o buffer do scanner
+                    break;
+                case 2:
+                    exibirMedicos(medicos);
+                    System.out.println("Insira o ID do Medico que deseja utilizar:");
+                    int idMedico = scanner.nextInt();
+                    exibirMenuMedico(medicos.get(idMedico - 1), autorizacoes, pacientes, exames);
+                    scanner.nextLine(); // Limpar o buffer do scanner
+                    break;
+                case 3:
+                    exibirAdministradores(administradores);
+                    System.out.println("Insira o ID do Administrador que deseja utilizar:");
+                    int idAdministrador = scanner.nextInt();
+                    exibirMenuAdministrador(administradores.get(idAdministrador - 1), medicos, autorizacoes, pacientes, exames, usuarios, administradores);
+                    scanner.nextLine(); // Limpar o buffer do scanner
+                    break;
+                case 0:
+                    System.out.println("");
+                    System.out.println("Saindo do programa. Até mais!");
+                    break;
+                default:
+                    System.out.println("");
+                    System.out.println("Opção inválida. Tente novamente.");
+                    System.out.println("");
+            }
+        }
+	}
+
+	private static void exibirAdministradores(ArrayList<Administrador> administradores) {
+    	System.out.println("");
+        System.out.println("Administradores Cadastrados:");
+        for (Administrador administrador : administradores) {
+        	System.out.println("");
+        	System.out.println("ID: " + administrador.getIdAdmin());
+            System.out.println("Nome: " + administrador.getNome());
         }
 	}
 
 	private static void exibirMedicos(ArrayList<Medico> medicos) {
     	System.out.println("");
-        System.out.println("Usuários Cadastrados:");
+        System.out.println("Médicos Cadastrados:");
         for (Medico medico : medicos) {
         	System.out.println("");
-        	System.out.println("  ID: " + medico.getIdMedico());
+        	System.out.println("ID: " + medico.getIdMedico());
             System.out.println("Nome: " + medico.getNome());
         }
-		
 	}
 
 	private static void exibirMenu() {
@@ -137,10 +156,10 @@ public class Main {
 
     private static void exibirPacientes(ArrayList<Paciente> pacientes) {
     	System.out.println("");
-        System.out.println("Usuários Cadastrados:");
+        System.out.println("Pacientes Cadastrados:");
         for (Paciente paciente : pacientes) {
         	System.out.println("");
-        	System.out.println("  ID: " + paciente.getIdPaciente());
+        	System.out.println("ID: " + paciente.getIdPaciente());
             System.out.println("Nome: " + paciente.getNome());
         }
     }
@@ -157,7 +176,6 @@ public class Main {
     	Scanner scanner = new Scanner(System.in);
 
         int opcao = scanner.nextInt();
-        scanner.nextLine(); // Limpar o buffer do scanner
 
         switch (opcao) {
             case 1:
@@ -179,7 +197,6 @@ public class Main {
                 break;
             case 0:
             	System.out.println("");
-                exibirMenu();
                 break;
             default:
             	System.out.println("");
@@ -234,7 +251,7 @@ public class Main {
             		medico.listarAutorizacao(autorizacoes, pacientes.get(p-1));
             		System.out.println("");
             		System.out.println("Pressione qualquer tecla para voltar ao Menu do Médico.");
-            		p = scanner.nextInt();
+            		String a = scanner.next();
             		scanner.nextLine(); // Limpar o buffer do scanner
             	} else if (opcao == 2) {
             		exibirExames(exames);
@@ -245,7 +262,7 @@ public class Main {
             		medico.listarAutorizacao(autorizacoes, exames.get(e-1));
             		System.out.println("");
             		System.out.println("Pressione qualquer tecla para voltar ao Menu do Médico.");
-            		e = scanner.nextInt();
+            		String a = scanner.next();
             		scanner.nextLine(); // Limpar o buffer do scanner
             	} else {
             		System.out.println("Erro. Retornando ao Menu do Médico.");
@@ -268,13 +285,12 @@ public class Main {
             	Autorizacao autorizacao = new Autorizacao(autorizacoes.size()+1, dataCadastro, "Não realizado", medico, pacientes.get(p-1), exames.get(e-1),false);
             	medico.incluirAutorizacao(autorizacao, autorizacoes);
         		System.out.println("Pressione qualquer tecla para voltar ao Menu do Médico.");
-        		e = scanner.nextInt();
+        		String a = scanner.next();
         		scanner.nextLine(); // Limpar o buffer do scanner
                 exibirMenuMedico(medico, autorizacoes, pacientes, exames);
                 break;
             case 0:
             	System.out.println("");
-                exibirMenu();
                 break;
             default:
             	System.out.println("");
@@ -294,14 +310,50 @@ public class Main {
         }
 	}
 
-	private static void exibirMenuAdministrador() {
+	private static void exibirMenuAdministrador(Administrador administrador, ArrayList<Medico> medicos, ArrayList<Autorizacao> autorizacoes, ArrayList<Paciente> pacientes, ArrayList<Exame> exames,ArrayList<Usuario> usuarios,ArrayList<Administrador> administradores) {
     	System.out.println("-- MENU DO ADMINISTRADOR --");
-        System.out.println("Selecione o tipo de usuário a ser utilizado:");
+        System.out.println("Selecione a ação a ser realizada:");
         System.out.println("");
         System.out.println("1. Incluir novo Usuário.");
         System.out.println("2. Buscar Usuário.");
         System.out.println("3. Exibir estatísticas gerais.");
         System.out.println("0. Voltar ao Menu Principal");
         System.out.println("");
+        
+    	Scanner scanner = new Scanner(System.in);
+
+        int opcao = scanner.nextInt();
+
+        switch (opcao) {
+            case 1:
+            	administrador.incluirUsuario(usuarios,administradores,medicos,pacientes);
+        		System.out.println("Pressione qualquer tecla para voltar ao Menu do Administrador.");
+        		int e = scanner.nextInt();
+        		scanner.nextLine(); // Limpar o buffer do scanner
+                exibirMenuAdministrador(administrador, medicos, autorizacoes, pacientes, exames, usuarios, administradores);
+                break;
+            case 2:
+            	System.out.println("");
+            	System.out.println("Insira o nome a ser buscado:");
+            	String nome = scanner.next();
+        		scanner.nextLine(); // Limpar o buffer do scanner
+        		administrador.buscarUsuariosPorNome(nome, usuarios);
+        		System.out.println("Pressione qualquer tecla para voltar ao Menu do Administrador.");
+        		String a = scanner.nextLine();
+                exibirMenuAdministrador(administrador, medicos, autorizacoes, pacientes, exames, usuarios, administradores);
+            case 3:
+            	administrador.estatisticasGerais(medicos, autorizacoes, pacientes);
+            	System.out.println("Pressione qualquer tecla para voltar ao Menu do Administrador.");
+        		String b = scanner.next();
+                exibirMenuAdministrador(administrador, medicos, autorizacoes, pacientes, exames, usuarios, administradores);
+            case 0:
+            	System.out.println("");
+                break;
+            default:
+            	System.out.println("");
+                System.out.println("Opção inválida. Tente novamente.");
+                System.out.println("");
+                exibirMenuAdministrador(administrador, medicos, autorizacoes, pacientes, exames, usuarios, administradores);
+        }
     }
 }

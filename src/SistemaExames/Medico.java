@@ -108,7 +108,7 @@ class Medico extends Usuario {
 	            System.out.println("Data de solicitação:" + autorizacao.getDataCadastro());
 	            System.out.println("Data de realização do exame:" + autorizacao.getDataRealizacao());
 	        }
-    	} else {
+    	} else if (n == 1) {
     		Autorizacao autorizacao = autorizacoesTipoExame.get(0);
         	System.out.println("-- AUTORIZAÇÕES DO PACIENTE --");
 	        System.out.println("");
@@ -119,6 +119,10 @@ class Medico extends Usuario {
     		System.out.println("Data de solicitação:" + autorizacao.getDataCadastro());
             System.out.println("Data de realização do exame:" + autorizacao.getDataRealizacao());
 
+    	} else {
+        	System.out.println("-- AUTORIZAÇÕES DO PACIENTE --");
+	        System.out.println("");
+	        System.out.println("Nenhuma autorização encontrada.");
     	}
 	}
 	

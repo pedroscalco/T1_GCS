@@ -48,19 +48,23 @@ public class Paciente extends Usuario {
     	        System.out.println("ID: " + autorizacao.getId());
 	        	System.out.println("Médico: " + autorizacao.getMedico().getNome());
 	        	System.out.println("Exame: " + autorizacao.getExameSolicitado().getTipo());
-	            System.out.println("Data de solicitação:" + autorizacao.getDataCadastro());
-	            System.out.println("Data de realização do exame:" + autorizacao.getDataRealizacao());
+	            System.out.println("Data de solicitação: " + autorizacao.getDataCadastro());
+	            System.out.println("Data de realização do exame: " + autorizacao.getDataRealizacao());
 	        }
-    	} else {
+    	} else if (n==1){
     		Autorizacao autorizacao = autorizacoesPaciente.get(0);
         	System.out.println("-- AUTORIZAÇÕES DO PACIENTE --");
 	        System.out.println("");
 	        System.out.println("ID: " + autorizacao.getId());
         	System.out.println("Médico: " + autorizacao.getMedico().getNome());
         	System.out.println("Exame: " + autorizacao.getExameSolicitado().getTipo());
-    		System.out.println("Data de solicitação:" + autorizacao.getDataCadastro());
-            System.out.println("Data de realização do exame:" + autorizacao.getDataRealizacao());
+    		System.out.println("Data de solicitação: " + autorizacao.getDataCadastro());
+            System.out.println("Data de realização do exame: " + autorizacao.getDataRealizacao());
 
+    	} else {
+        	System.out.println("-- AUTORIZAÇÕES DO PACIENTE --");
+	        System.out.println("");
+	        System.out.println("Nenhuma autorização encontrada.");
     	}
     }
 
@@ -93,9 +97,11 @@ public class Paciente extends Usuario {
             if (diasDecorridos >= 0 && diasDecorridos <= 30 && !autorizacao.getStatus()) {
             	autorizacao.setDataRealizacao(dataRealizacao); // Atualiza a data de realização no Exame
             	autorizacao.setStatus(true); // Marca o exame como realizado
+            	System.out.println("");
                 System.out.println("Exame foi marcado como 'realizado' com sucesso!");
             }
         } catch (Exception e) {
+        	System.out.println("");
         	System.out.println("O exame não pode ser marcado como 'realizado'. Verifique as condições.");
             e.printStackTrace();
         }
