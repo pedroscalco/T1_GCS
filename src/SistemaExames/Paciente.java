@@ -3,6 +3,7 @@ package SistemaExames;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -48,23 +49,19 @@ public class Paciente extends Usuario {
     	        System.out.println("ID: " + autorizacao.getId());
 	        	System.out.println("Médico: " + autorizacao.getMedico().getNome());
 	        	System.out.println("Exame: " + autorizacao.getExameSolicitado().getTipo());
-	            System.out.println("Data de solicitação: " + autorizacao.getDataCadastro());
-	            System.out.println("Data de realização do exame: " + autorizacao.getDataRealizacao());
+	            System.out.println("Data de solicitação:" + autorizacao.getDataCadastro());
+	            System.out.println("Data de realização do exame:" + autorizacao.getDataRealizacao());
 	        }
-    	} else if (n==1){
+    	} else {
     		Autorizacao autorizacao = autorizacoesPaciente.get(0);
         	System.out.println("-- AUTORIZAÇÕES DO PACIENTE --");
 	        System.out.println("");
 	        System.out.println("ID: " + autorizacao.getId());
         	System.out.println("Médico: " + autorizacao.getMedico().getNome());
         	System.out.println("Exame: " + autorizacao.getExameSolicitado().getTipo());
-    		System.out.println("Data de solicitação: " + autorizacao.getDataCadastro());
-            System.out.println("Data de realização do exame: " + autorizacao.getDataRealizacao());
+    		System.out.println("Data de solicitação:" + autorizacao.getDataCadastro());
+            System.out.println("Data de realização do exame:" + autorizacao.getDataRealizacao());
 
-    	} else {
-        	System.out.println("-- AUTORIZAÇÕES DO PACIENTE --");
-	        System.out.println("");
-	        System.out.println("Nenhuma autorização encontrada.");
     	}
     }
 
@@ -89,19 +86,15 @@ public class Paciente extends Usuario {
     		System.out.println(dataRealizacao);
             Date dataSolicitacao = dateFormat.parse(autorizacao.getDataCadastro());
             Date dataMarcacao = dateFormat.parse(dataRealizacao);
-
             long diferencaEmMillis = dataMarcacao.getTime() - dataSolicitacao.getTime();
             int diasDecorridos = (int) (diferencaEmMillis / (24 * 60 * 60 * 1000));
 
-            // O paciente pode marcar como realizado antes da data de solicitação ou até 30 dias após
             if (diasDecorridos >= 0 && diasDecorridos <= 30 && !autorizacao.getStatus()) {
-            	autorizacao.setDataRealizacao(dataRealizacao); // Atualiza a data de realização no Exame
-            	autorizacao.setStatus(true); // Marca o exame como realizado
-            	System.out.println("");
+            	autorizacao.setDataRealizacao(dataRealizacao); 
+            	autorizacao.setStatus(true);
                 System.out.println("Exame foi marcado como 'realizado' com sucesso!");
             }
         } catch (Exception e) {
-        	System.out.println("");
         	System.out.println("O exame não pode ser marcado como 'realizado'. Verifique as condições.");
             e.printStackTrace();
         }
@@ -110,4 +103,58 @@ public class Paciente extends Usuario {
 	public int getIdPaciente() {
 		return this.idPaciente;
 	}
-}
+
+	// Método para solicitar reagendamento de um exame
+    public boolean solicitarReagendamento(Autorizacao autorizacao, String novaData) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            Date dataMarcacao = dateFormat.parse(novaData);
+            Date dataCadastro = dateFormat.parse(autorizacao.getDataCadastro());
+			long diferencaEmMillis = dataCadastro.getTime() - dataMarcacao.getTime();
+            int diasDecorridos = (int) (diferencaEmMillis / (24 * 60 * 60 * 1000));
+
+            if (diasDecorridos >= 7) {
+                autorizacao.setDataCadastro(novaData);
+				System.out.println("Exame foi reagendado com sucesso!");
+                return true;
+            }
+        } catch (ParseException e) {
+            System.out.println("Erro ao tentar o reagendamento. Verifique as condições.");
+			e.printStackTrace();
+        }
+        return false;
+    }
+
+	public void removerAutorizacaoPorIdPaciente(ArrayList<Autorizacao> autorizacoes, int idAutorizacao) {
+    List<Autorizacao> autorizacoesPaciente = new ArrayList<>();
+
+    for (Autorizacao autorizacao : autorizacoes) {
+        if (autorizacao.getPaciente().getId() == this.getId()) {
+            autorizacoesPaciente.add(autorizacao);
+        }
+    }
+
+    for (Autorizacao autorizacao : autorizacoesPaciente) {
+        if (autorizacao.getId() == idAutorizacao) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                Date dataRealizacao = dateFormat.parse(autorizacao.getDataRealizacao());
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.DAY_OF_MONTH, 30);
+                Date dataAtual = calendar.getTime();
+                Date dataHoje = new Date();
+
+                if (dataRealizacao.after(dataHoje) && dataRealizacao.before(dataAtual)) {
+                    autorizacoes.remove(autorizacao);
+                    System.out.println("Exame cancelado!");
+                    return;
+                } else {
+                    System.out.println("O exame não pode ser cancelado com menos de 30 dias de antecedência. Verifique as condições.");
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    }
+ }

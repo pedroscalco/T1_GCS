@@ -1,5 +1,7 @@
 package SistemaExames;
 
+import java.util.List;
+
 class Autorizacao {
     private int id;
     private String dataCadastro;
@@ -74,5 +76,4 @@ class Autorizacao {
     public void setExameSolicitado(Exame exameSolicitado) {
         this.exameSolicitado = exameSolicitado;
     }
-
 }
